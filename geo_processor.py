@@ -28,7 +28,6 @@ def clean_coordinates(input_file, output_file=None, delimiter=';'):
     Returns the cleaned DataFrame and saves to output_file if provided
     """
     try:
-        # Try to detect the delimiter if not specified
         if delimiter is None:
             with open(input_file, 'r') as f:
                 first_line = f.readline().strip()
@@ -37,7 +36,7 @@ def clean_coordinates(input_file, output_file=None, delimiter=';'):
                 elif ';' in first_line:
                     delimiter = ';'
                 else:
-                    delimiter = ','  # Default to comma if can't detect
+                    delimiter = ','
         
         df = pd.read_csv(input_file, delimiter=delimiter)
         
@@ -127,17 +126,14 @@ def main():
             print(f"Error: Input file {args.input} not found. Use --create-sample to create a sample file.")
             return
     
-    # Check if the file is already cleaned
     is_already_cleaned = False
     if args.skip_cleaning:
         is_already_cleaned = True
     else:
-        # Try to detect if file is already cleaned by checking first few lines
         try:
             with open(args.input, 'r') as f:
                 first_lines = [f.readline().strip() for _ in range(3)]
                 
-            # Check if the file appears to be already cleaned (no extra spaces around values)
             if all(',' in line and ' ' not in line.replace(', ', '') for line in first_lines if line):
                 is_already_cleaned = True
                 print(f"Detected that input file appears to be already cleaned (comma-delimited, no extra spaces)")
@@ -145,13 +141,11 @@ def main():
                 is_already_cleaned = True
                 print(f"Detected that input file appears to be already cleaned (semicolon-delimited, no extra spaces)")
         except Exception:
-            # If there's any error in detection, proceed with cleaning
             pass
     
     if is_already_cleaned:
         print("Skipping cleaning step as file appears to be already cleaned")
         try:
-            # Determine delimiter for already cleaned file
             with open(args.input, 'r') as f:
                 first_line = f.readline().strip()
                 if ',' in first_line:
