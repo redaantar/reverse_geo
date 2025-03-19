@@ -24,4 +24,4 @@ To run the script use this command:
 python3 geo_processor.py --input coordinates.csv --output addresses.csv --api-key [GMAPS API KEY]
 ```
 
-PS: don't forget to replace the input and output with your file names.
+PS: don't forget to replace the input and output with your files name.
